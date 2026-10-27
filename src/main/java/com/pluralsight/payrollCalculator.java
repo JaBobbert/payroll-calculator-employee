@@ -1,18 +1,26 @@
 package com.pluralsight;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
+import java.util.Scanner;
 
 
 public class payrollCalculator {
     public static void main(String[] args) {
         String fileName = "employees.csv";
 
+        Scanner scan = new Scanner(System.in);
+
+        System.out.println("Enter the name of the file to process");
+        String inputFileName = scan.nextLine();
+
+        System.out.println("Enter the name of the payroll to create: ");
+        String outputFileName = scan.nextLine();
 
         try {
 
-            BufferedReader reader = new BufferedReader(new FileReader(fileName));
+
+            BufferedReader reader = new BufferedReader(new FileReader(inputFileName));
+            BufferedWriter writer = new BufferedWriter(new FileWriter(outputFileName));
             String line;
 
 
@@ -29,12 +37,17 @@ public class payrollCalculator {
                 double payRate = Double.parseDouble(tokens[3]);
 
                 Employee employee = new Employee(id, name, hoursWorked, payRate);
+                String outputLine = "";
 
 
-                System.out.printf("Employee ID: %d, Name: %s, Gross Pay: $%.2f%n",
+                outputLine = String.format("%d|%n|%.2%n",
                         employee.getEmployeeId(), employee.getName(), employee.getGrossPay());
+
+                writer.write(outputLine);
             }
             reader.close();
+            writer.close();
+            scan.close();
         } catch (IOException e) {
 
             System.err.println("Error reading file: " + fileName);
